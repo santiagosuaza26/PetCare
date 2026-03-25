@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +23,8 @@ function RegisterPetScreen() {
   const [petAge, setPetAge] = useState('');
   const [ownerName, setOwnerName] = useState('');
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+  const [focusedInput, setFocusedInput] = useState('');
+  const formAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const hasAllTextFields =
@@ -34,6 +37,33 @@ function RegisterPetScreen() {
 
     setIsSubmitEnabled(hasAllTextFields && hasValidAge);
   }, [petName, petSpecies, petBreed, petAge, ownerName]);
+
+  useEffect(() => {
+    Animated.timing(formAnimation, {
+      toValue: 1,
+      duration: 360,
+      useNativeDriver: true
+    }).start();
+  }, [formAnimation]);
+
+  const formAnimatedStyle = {
+    opacity: formAnimation,
+    transform: [
+      {
+        translateY: formAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [12, 0]
+        })
+      }
+    ]
+  };
+
+  const getInputStyle = (fieldName) => {
+    return [
+      registerPetStyles.input,
+      focusedInput === fieldName && registerPetStyles.inputFocused
+    ];
+  };
 
   const clearFormFields = () => {
     setPetName('');
@@ -73,7 +103,7 @@ function RegisterPetScreen() {
           contentContainerStyle={registerPetStyles.scrollContainer}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={registerPetStyles.container}>
+          <Animated.View style={[registerPetStyles.container, formAnimatedStyle]}>
             <Text style={registerPetStyles.title}>Registrar mascota</Text>
             <Text style={registerPetStyles.description}>
               Completa los campos para guardar una nueva mascota.
@@ -84,8 +114,10 @@ function RegisterPetScreen() {
               <TextInput
                 value={petName}
                 onChangeText={setPetName}
+                onFocus={() => setFocusedInput('petName')}
+                onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Luna"
-                style={registerPetStyles.input}
+                style={getInputStyle('petName')}
               />
             </View>
 
@@ -94,8 +126,10 @@ function RegisterPetScreen() {
               <TextInput
                 value={petSpecies}
                 onChangeText={setPetSpecies}
+                onFocus={() => setFocusedInput('petSpecies')}
+                onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Perro"
-                style={registerPetStyles.input}
+                style={getInputStyle('petSpecies')}
               />
             </View>
 
@@ -104,8 +138,10 @@ function RegisterPetScreen() {
               <TextInput
                 value={petBreed}
                 onChangeText={setPetBreed}
+                onFocus={() => setFocusedInput('petBreed')}
+                onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Labrador"
-                style={registerPetStyles.input}
+                style={getInputStyle('petBreed')}
               />
             </View>
 
@@ -114,8 +150,10 @@ function RegisterPetScreen() {
               <TextInput
                 value={petAge}
                 onChangeText={setPetAge}
+                onFocus={() => setFocusedInput('petAge')}
+                onBlur={() => setFocusedInput('')}
                 placeholder="Ej. 4"
-                style={registerPetStyles.input}
+                style={getInputStyle('petAge')}
                 keyboardType="number-pad"
               />
             </View>
@@ -125,8 +163,10 @@ function RegisterPetScreen() {
               <TextInput
                 value={ownerName}
                 onChangeText={setOwnerName}
+                onFocus={() => setFocusedInput('ownerName')}
+                onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Maria"
-                style={registerPetStyles.input}
+                style={getInputStyle('ownerName')}
               />
             </View>
 
@@ -134,19 +174,20 @@ function RegisterPetScreen() {
               El boton se habilita cuando todos los campos son validos.
             </Text>
 
-            <TouchableOpacity
+            <Pressable
               onPress={handleRegisterPet}
               disabled={!isSubmitEnabled}
-              style={[
+              style={({ pressed }) => [
                 registerPetStyles.submitButton,
                 isSubmitEnabled
                   ? registerPetStyles.submitButtonEnabled
-                  : registerPetStyles.submitButtonDisabled
+                  : registerPetStyles.submitButtonDisabled,
+                pressed && registerPetStyles.submitButtonPressed
               ]}
             >
               <Text style={registerPetStyles.submitButtonText}>Registrar mascota</Text>
-            </TouchableOpacity>
-          </View>
+            </Pressable>
+          </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -1,63 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import tipsData from '../data/tipsData';
 import tipsStyles from '../styles/TipsStyles';
 
 function TipsScreen() {
-  const [tips, setTips] = useState([]);
-  const [activeTipIndex, setActiveTipIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const mockTips = [
-      {
-        id: '1',
-        title: 'Vacunas al dia',
-        description: 'Cumple el calendario de vacunas y controles con el veterinario.'
-      },
-      {
-        id: '2',
-        title: 'Hidratacion constante',
-        description: 'Asegura agua limpia y fresca durante todo el dia.'
-      },
-      {
-        id: '3',
-        title: 'Actividad diaria',
-        description: 'Dedica al menos 20 minutos al juego o paseo segun su especie.'
-      },
-      {
-        id: '4',
-        title: 'Alimentacion equilibrada',
-        description: 'Usa porciones adecuadas y evita alimentos no recomendados.'
-      }
-    ];
-
-    setTips(mockTips);
-  }, []);
-
-  useEffect(() => {
-    if (tips.length === 0) {
-      return undefined;
-    }
-
     const intervalId = setInterval(() => {
-      setActiveTipIndex((previousIndex) => {
-        return (previousIndex + 1) % tips.length;
+      setCurrentIndex((previousIndex) => {
+        return (previousIndex + 1) % tipsData.length;
       });
-    }, 4000);
+    }, 5000);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [tips.length]);
+  }, []);
 
-  const renderTipItem = ({ item }) => {
-    return (
-      <View style={tipsStyles.tipCard}>
-        <Text style={tipsStyles.tipTitle}>{item.title}</Text>
-        <Text style={tipsStyles.tipDescription}>{item.description}</Text>
-      </View>
-    );
+  const currentTip = tipsData[currentIndex];
+
+  const handleNextTip = () => {
+    setCurrentIndex((previousIndex) => {
+      return (previousIndex + 1) % tipsData.length;
+    });
   };
 
   return (
@@ -67,17 +35,19 @@ function TipsScreen() {
         <Text style={tipsStyles.description}>
           Recomendaciones simples para mantener a tus mascotas saludables.
         </Text>
-        <Text style={tipsStyles.description}>
-          Consejo destacado: {tips[activeTipIndex]?.title || 'Cargando consejos...'}
+
+        <Text style={tipsStyles.counterText}>
+          Consejo {currentIndex + 1} de {tipsData.length}
         </Text>
 
-        <FlatList
-          data={tips}
-          keyExtractor={(item) => item.id}
-          renderItem={renderTipItem}
-          contentContainerStyle={tipsStyles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
+        <View style={tipsStyles.tipCard}>
+          <Text style={tipsStyles.tipTitle}>{currentTip.title}</Text>
+          <Text style={tipsStyles.tipDescription}>{currentTip.content}</Text>
+        </View>
+
+        <View style={tipsStyles.nextButtonWrapper}>
+          <Button title="Siguiente" color="#111111" onPress={handleNextTip} />
+        </View>
       </View>
     </SafeAreaView>
   );

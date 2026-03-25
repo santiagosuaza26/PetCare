@@ -3,40 +3,52 @@ import { StyleSheet } from 'react-native';
 const petDetailStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F7FAFC'
+    backgroundColor: '#F3F4F6'
   },
   container: {
     flex: 1,
-    padding: 20
+    paddingHorizontal: 20,
+    paddingTop: 18
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: '700',
-    color: '#1A202C',
-    marginBottom: 6
+    color: '#111111',
+    marginBottom: 4,
+    letterSpacing: 0.2
   },
   description: {
     fontSize: 16,
-    color: '#2D3748',
-    marginBottom: 16
+    color: '#4B5563',
+    marginBottom: 18,
+    lineHeight: 22
   },
   card: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    padding: 16,
+    borderRadius: 16,
+    padding: 18,
     borderWidth: 1,
-    borderColor: '#CBD5E0'
+    borderColor: '#D1D5DB',
+    shadowColor: '#111111',
+    shadowOffset: {
+      width: 0,
+      height: 8
+    },
+    shadowOpacity: 0.09,
+    shadowRadius: 12,
+    elevation: 4
   },
   petName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '700',
-    color: '#1A202C',
-    marginBottom: 8
+    color: '#111111',
+    marginBottom: 10
   },
   petInfo: {
     fontSize: 15,
-    color: '#2D3748',
-    marginBottom: 4
+    color: '#374151',
+    marginBottom: 6,
+    lineHeight: 22
   }
 });
 

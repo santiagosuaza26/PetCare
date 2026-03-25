@@ -45,6 +45,10 @@ function TabIcon({ routeName, color }) {
 function getTabScreenOptions(route) {
   return {
     headerShown: false,
+    tabBarActiveTintColor: '#111111',
+    tabBarInactiveTintColor: '#6B7280',
+    tabBarStyle: appStyles.tabBar,
+    tabBarLabelStyle: appStyles.tabLabel,
     tabBarIcon: ({ color }) => {
       return <TabIcon routeName={route.name} color={color} />;
     }
@@ -56,7 +60,10 @@ function PetsStackNavigator() {
     <Stack.Navigator
       initialRouteName={STACK_ROUTES.PET_LIST}
       screenOptions={{
-        headerTitleAlign: 'center'
+        headerTitleAlign: 'center',
+        headerStyle: appStyles.stackHeader,
+        headerTitleStyle: appStyles.stackHeaderTitle,
+        headerTintColor: '#111111'
       }}
     >
       <Stack.Screen
