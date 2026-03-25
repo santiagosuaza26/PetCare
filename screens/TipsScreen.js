@@ -6,6 +6,7 @@ import tipsStyles from '../styles/TipsStyles';
 
 function TipsScreen() {
   const [tips, setTips] = useState([]);
+  const [activeTipIndex, setActiveTipIndex] = useState(0);
 
   useEffect(() => {
     const mockTips = [
@@ -34,6 +35,22 @@ function TipsScreen() {
     setTips(mockTips);
   }, []);
 
+  useEffect(() => {
+    if (tips.length === 0) {
+      return undefined;
+    }
+
+    const intervalId = setInterval(() => {
+      setActiveTipIndex((previousIndex) => {
+        return (previousIndex + 1) % tips.length;
+      });
+    }, 4000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [tips.length]);
+
   const renderTipItem = ({ item }) => {
     return (
       <View style={tipsStyles.tipCard}>
@@ -49,6 +66,9 @@ function TipsScreen() {
         <Text style={tipsStyles.title}>Consejos de cuidado</Text>
         <Text style={tipsStyles.description}>
           Recomendaciones simples para mantener a tus mascotas saludables.
+        </Text>
+        <Text style={tipsStyles.description}>
+          Consejo destacado: {tips[activeTipIndex]?.title || 'Cargando consejos...'}
         </Text>
 
         <FlatList

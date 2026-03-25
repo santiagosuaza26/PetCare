@@ -42,7 +42,7 @@ function PetListScreen({ navigation }) {
 
       return mockPets;
     });
-  }, [setPets]);
+  }, []);
 
   const handlePetPress = (selectedPet) => {
     navigation.navigate(PET_DETAIL_ROUTE, { pet: selectedPet });

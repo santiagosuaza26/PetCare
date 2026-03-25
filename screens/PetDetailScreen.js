@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import petDetailStyles from '../styles/PetDetailStyles';
 
-function PetDetailScreen({ route }) {
+function PetDetailScreen({ route, navigation }) {
   const selectedPet = route?.params?.pet;
+  const selectedPetName = selectedPet?.name;
   const petAge = selectedPet?.age;
   const petData = {
     name: selectedPet?.name || 'Mascota sin nombre',
@@ -13,6 +14,12 @@ function PetDetailScreen({ route }) {
     breed: selectedPet?.breed || 'No especificado',
     ageLabel: typeof petAge === 'number' ? `${petAge} anos` : 'No especificado'
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: selectedPetName ? `Detalle: ${selectedPetName}` : 'Detalle de mascota'
+    });
+  }, [navigation, selectedPetName]);
 
   return (
     <SafeAreaView style={petDetailStyles.safeArea}>
