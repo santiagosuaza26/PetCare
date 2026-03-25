@@ -44,7 +44,7 @@ function PetListScreen({ navigation }) {
 
       return mockPets;
     });
-  }, []);
+  }, [setPets]);
 
   useEffect(() => {
     Animated.sequence([
