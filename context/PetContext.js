@@ -11,10 +11,26 @@ function PetProvider({ children }) {
     });
   };
 
+  const updatePet = (petId, updatedFields) => {
+    setPets((previousPets) => {
+      return previousPets.map((pet) => {
+        if (pet.id !== petId) {
+          return pet;
+        }
+
+        return {
+          ...pet,
+          ...updatedFields
+        };
+      });
+    });
+  };
+
   const petContextValue = {
     pets,
     setPets,
-    addPet
+    addPet,
+    updatePet
   };
 
   return <PetContext.Provider value={petContextValue}>{children}</PetContext.Provider>;

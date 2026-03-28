@@ -17,26 +17,27 @@ import registerPetStyles from '../styles/RegisterPetStyles';
 
 function RegisterPetScreen() {
   const { addPet } = usePetContext();
-  const [petName, setPetName] = useState('');
-  const [petSpecies, setPetSpecies] = useState('');
-  const [petBreed, setPetBreed] = useState('');
-  const [petAge, setPetAge] = useState('');
-  const [ownerName, setOwnerName] = useState('');
+  const [name, setName] = useState('');
+  const [species, setSpecies] = useState('');
+  const [breed, setBreed] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [focusedInput, setFocusedInput] = useState('');
   const formAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const hasAllTextFields =
-      petName.trim() !== '' &&
-      petSpecies.trim() !== '' &&
-      petBreed.trim() !== '' &&
-      ownerName.trim() !== '';
-    const parsedAge = Number(petAge);
-    const hasValidAge = petAge.trim() !== '' && Number.isInteger(parsedAge) && parsedAge > 0;
+      name.trim() !== '' &&
+      species.trim() !== '' &&
+      breed.trim() !== '';
+    const parsedAge = Number(age);
+    const parsedWeight = Number(weight);
+    const hasValidAge = age.trim() !== '' && Number.isInteger(parsedAge) && parsedAge > 0;
+    const hasValidWeight = weight.trim() !== '' && Number.isFinite(parsedWeight) && parsedWeight > 0;
 
-    setIsSubmitEnabled(hasAllTextFields && hasValidAge);
-  }, [petName, petSpecies, petBreed, petAge, ownerName]);
+    setIsSubmitEnabled(hasAllTextFields && hasValidAge && hasValidWeight);
+  }, [name, species, breed, age, weight]);
 
   useEffect(() => {
     Animated.timing(formAnimation, {
@@ -66,11 +67,11 @@ function RegisterPetScreen() {
   };
 
   const clearFormFields = () => {
-    setPetName('');
-    setPetSpecies('');
-    setPetBreed('');
-    setPetAge('');
-    setOwnerName('');
+    setName('');
+    setSpecies('');
+    setBreed('');
+    setAge('');
+    setWeight('');
   };
 
   const handleRegisterPet = () => {
@@ -80,16 +81,23 @@ function RegisterPetScreen() {
 
     const newPet = {
       id: Date.now().toString(),
-      name: petName.trim(),
-      species: petSpecies.trim(),
-      breed: petBreed.trim(),
-      age: Number(petAge.trim()),
-      owner: ownerName.trim()
+      name: name.trim(),
+      species: species.trim(),
+      breed: breed.trim(),
+      age: Number(age.trim()),
+      weight: Number(weight.trim())
     };
 
     addPet(newPet);
 
-    Alert.alert('Registro exitoso', 'La mascota fue registrada correctamente.');
+    Alert.alert(
+      'Mascota registrada',
+      `Nombre: ${newPet.name}\nEspecie: ${newPet.species}\nRaza: ${newPet.breed}\nEdad: ${newPet.age} anos\nPeso: ${newPet.weight} kg`
+    );
+    clearFormFields();
+  };
+
+  const handleClear = () => {
     clearFormFields();
   };
 
@@ -112,61 +120,62 @@ function RegisterPetScreen() {
             <View style={registerPetStyles.fieldBlock}>
               <Text style={registerPetStyles.fieldLabel}>Nombre de la mascota</Text>
               <TextInput
-                value={petName}
-                onChangeText={setPetName}
-                onFocus={() => setFocusedInput('petName')}
+                value={name}
+                onChangeText={setName}
+                onFocus={() => setFocusedInput('name')}
                 onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Luna"
-                style={getInputStyle('petName')}
+                style={getInputStyle('name')}
               />
             </View>
 
             <View style={registerPetStyles.fieldBlock}>
               <Text style={registerPetStyles.fieldLabel}>Especie</Text>
               <TextInput
-                value={petSpecies}
-                onChangeText={setPetSpecies}
-                onFocus={() => setFocusedInput('petSpecies')}
+                value={species}
+                onChangeText={setSpecies}
+                onFocus={() => setFocusedInput('species')}
                 onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Perro"
-                style={getInputStyle('petSpecies')}
+                style={getInputStyle('species')}
               />
             </View>
 
             <View style={registerPetStyles.fieldBlock}>
               <Text style={registerPetStyles.fieldLabel}>Raza</Text>
               <TextInput
-                value={petBreed}
-                onChangeText={setPetBreed}
-                onFocus={() => setFocusedInput('petBreed')}
+                value={breed}
+                onChangeText={setBreed}
+                onFocus={() => setFocusedInput('breed')}
                 onBlur={() => setFocusedInput('')}
                 placeholder="Ej. Labrador"
-                style={getInputStyle('petBreed')}
+                style={getInputStyle('breed')}
               />
             </View>
 
             <View style={registerPetStyles.fieldBlock}>
               <Text style={registerPetStyles.fieldLabel}>Edad</Text>
               <TextInput
-                value={petAge}
-                onChangeText={setPetAge}
-                onFocus={() => setFocusedInput('petAge')}
+                value={age}
+                onChangeText={setAge}
+                onFocus={() => setFocusedInput('age')}
                 onBlur={() => setFocusedInput('')}
                 placeholder="Ej. 4"
-                style={getInputStyle('petAge')}
+                style={getInputStyle('age')}
                 keyboardType="number-pad"
               />
             </View>
 
             <View style={registerPetStyles.fieldBlock}>
-              <Text style={registerPetStyles.fieldLabel}>Nombre del responsable</Text>
+              <Text style={registerPetStyles.fieldLabel}>Peso (kg)</Text>
               <TextInput
-                value={ownerName}
-                onChangeText={setOwnerName}
-                onFocus={() => setFocusedInput('ownerName')}
+                value={weight}
+                onChangeText={setWeight}
+                onFocus={() => setFocusedInput('weight')}
                 onBlur={() => setFocusedInput('')}
-                placeholder="Ej. Maria"
-                style={getInputStyle('ownerName')}
+                placeholder="Ej. 18.5"
+                style={getInputStyle('weight')}
+                keyboardType="decimal-pad"
               />
             </View>
 
@@ -186,6 +195,16 @@ function RegisterPetScreen() {
               ]}
             >
               <Text style={registerPetStyles.submitButtonText}>Registrar mascota</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={handleClear}
+              style={({ pressed }) => [
+                registerPetStyles.clearButton,
+                pressed && registerPetStyles.clearButtonPressed
+              ]}
+            >
+              <Text style={registerPetStyles.clearButtonText}>Limpiar</Text>
             </Pressable>
           </Animated.View>
         </ScrollView>

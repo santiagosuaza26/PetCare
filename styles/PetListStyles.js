@@ -52,6 +52,15 @@ const petListStyles = StyleSheet.create({
     color: '#111111',
     marginBottom: 6
   },
+  petNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8
+  },
+  petEmoji: {
+    fontSize: 21,
+    marginBottom: 6
+  },
   petInfo: {
     fontSize: 14,
     color: '#374151',

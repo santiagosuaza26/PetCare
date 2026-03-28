@@ -28,6 +28,26 @@ const tipsData = [
     id: '6',
     title: 'Atencion al comportamiento',
     content: 'Si notas cambios de ánimo o apetito, consulta al profesional a tiempo.'
+  },
+  {
+    id: '7',
+    title: 'Desparasitacion programada',
+    content: 'Sigue un calendario de desparasitación interna y externa recomendado por el veterinario.'
+  },
+  {
+    id: '8',
+    title: 'Descanso de calidad',
+    content: 'Proporciona una cama cómoda y un espacio tranquilo para dormir sin interrupciones.'
+  },
+  {
+    id: '9',
+    title: 'Socializacion positiva',
+    content: 'Expón a tu mascota a nuevas personas y entornos de forma gradual y segura.'
+  },
+  {
+    id: '10',
+    title: 'Chequeo dental',
+    content: 'Revisa dientes y encías con frecuencia para prevenir mal aliento e infecciones.'
   }
 ];
 

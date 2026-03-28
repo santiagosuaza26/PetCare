@@ -98,6 +98,23 @@ const registerPetStyles = StyleSheet.create({
   submitButtonPressed: {
     transform: [{ scale: 0.99 }],
     opacity: 0.94
+  },
+  clearButton: {
+    marginTop: 10,
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    backgroundColor: '#FFFFFF'
+  },
+  clearButtonText: {
+    color: '#111111',
+    fontSize: 15,
+    fontWeight: '700'
+  },
+  clearButtonPressed: {
+    opacity: 0.9
   }
 });
 

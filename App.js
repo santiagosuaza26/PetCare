@@ -23,8 +23,8 @@ const STACK_ROUTES = {
   PET_DETAIL: 'PetDetail'
 };
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const TAB_NAVIGATOR = createBottomTabNavigator();
+const STACK_NAVIGATOR = createNativeStackNavigator();
 
 function getTabIcon(routeName) {
   if (routeName === TAB_ROUTES.PETS) {
@@ -57,7 +57,7 @@ function getTabScreenOptions(route) {
 
 function PetsStackNavigator() {
   return (
-    <Stack.Navigator
+    <STACK_NAVIGATOR.Navigator
       initialRouteName={STACK_ROUTES.PET_LIST}
       screenOptions={{
         headerTitleAlign: 'center',
@@ -66,21 +66,21 @@ function PetsStackNavigator() {
         headerTintColor: '#111111'
       }}
     >
-      <Stack.Screen
+      <STACK_NAVIGATOR.Screen
         name={STACK_ROUTES.PET_LIST}
         component={PetListScreen}
         options={{
           title: 'Mascotas'
         }}
       />
-      <Stack.Screen
+      <STACK_NAVIGATOR.Screen
         name={STACK_ROUTES.PET_DETAIL}
         component={PetDetailScreen}
         options={{
           title: 'Detalle de mascota'
         }}
       />
-    </Stack.Navigator>
+    </STACK_NAVIGATOR.Navigator>
   );
 }
 
@@ -89,32 +89,32 @@ function App() {
     <PetProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Tab.Navigator
+          <TAB_NAVIGATOR.Navigator
             initialRouteName={TAB_ROUTES.PETS}
             screenOptions={({ route }) => getTabScreenOptions(route)}
           >
-            <Tab.Screen
+            <TAB_NAVIGATOR.Screen
               name={TAB_ROUTES.PETS}
               component={PetsStackNavigator}
               options={{
                 title: 'Mascotas'
               }}
             />
-            <Tab.Screen
+            <TAB_NAVIGATOR.Screen
               name={TAB_ROUTES.REGISTER}
               component={RegisterPetScreen}
               options={{
                 title: 'Registrar'
               }}
             />
-            <Tab.Screen
+            <TAB_NAVIGATOR.Screen
               name={TAB_ROUTES.TIPS}
               component={TipsScreen}
               options={{
                 title: 'Consejos'
               }}
             />
-          </Tab.Navigator>
+          </TAB_NAVIGATOR.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
     </PetProvider>

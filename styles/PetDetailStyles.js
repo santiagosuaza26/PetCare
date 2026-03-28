@@ -49,6 +49,38 @@ const petDetailStyles = StyleSheet.create({
     color: '#374151',
     marginBottom: 6,
     lineHeight: 22
+  },
+  metaInfo: {
+    fontSize: 14,
+    color: '#4B5563',
+    marginTop: 6,
+    lineHeight: 20
+  },
+  favoriteButton: {
+    marginTop: 14,
+    backgroundColor: '#111111',
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center'
+  },
+  favoriteButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700'
+  },
+  backButton: {
+    marginTop: 10,
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    backgroundColor: '#FFFFFF'
+  },
+  backButtonText: {
+    color: '#111111',
+    fontSize: 15,
+    fontWeight: '700'
   }
 });
 

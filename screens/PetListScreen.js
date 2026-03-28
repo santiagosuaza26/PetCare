@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,6 +9,7 @@ const PET_DETAIL_ROUTE = 'PetDetail';
 
 function PetListScreen({ navigation }) {
   const { pets, setPets } = usePetContext();
+  const [petList, setPetList] = useState([]);
   const titleAnimation = useRef(new Animated.Value(0)).current;
   const listAnimation = useRef(new Animated.Value(0)).current;
 
@@ -19,21 +20,24 @@ function PetListScreen({ navigation }) {
         name: 'Luna',
         species: 'Perro',
         breed: 'Labrador',
-        age: 4
+        age: 4,
+        weight: 24
       },
       {
         id: '2',
         name: 'Milo',
         species: 'Gato',
         breed: 'Siames',
-        age: 2
+        age: 2,
+        weight: 5
       },
       {
         id: '3',
         name: 'Nala',
         species: 'Perro',
         breed: 'Beagle',
-        age: 1
+        age: 1,
+        weight: 10
       }
     ];
 
@@ -45,6 +49,10 @@ function PetListScreen({ navigation }) {
       return mockPets;
     });
   }, [setPets]);
+
+  useEffect(() => {
+    setPetList(pets);
+  }, [pets]);
 
   useEffect(() => {
     Animated.sequence([
@@ -89,16 +97,34 @@ function PetListScreen({ navigation }) {
     navigation.navigate(PET_DETAIL_ROUTE, { pet: selectedPet });
   };
 
+  const getSpeciesEmoji = (speciesName) => {
+    const normalizedSpecies = speciesName?.toLowerCase();
+
+    if (normalizedSpecies === 'perro') {
+      return '🐶';
+    }
+
+    if (normalizedSpecies === 'gato') {
+      return '🐱';
+    }
+
+    return '🐾';
+  };
+
   const renderPetItem = ({ item }) => {
     return (
       <Pressable
         onPress={() => handlePetPress(item)}
         style={({ pressed }) => [petListStyles.card, pressed && petListStyles.cardPressed]}
       >
-        <Text style={petListStyles.petName}>{item.name}</Text>
+        <View style={petListStyles.petNameRow}>
+          <Text style={petListStyles.petEmoji}>{getSpeciesEmoji(item.species)}</Text>
+          <Text style={petListStyles.petName}>{item.name}</Text>
+        </View>
         <Text style={petListStyles.petInfo}>Especie: {item.species}</Text>
         <Text style={petListStyles.petInfo}>Raza: {item.breed}</Text>
         <Text style={petListStyles.petInfo}>Edad: {item.age} anos</Text>
+        <Text style={petListStyles.petInfo}>Peso: {item.weight} kg</Text>
       </Pressable>
     );
   };
@@ -115,7 +141,7 @@ function PetListScreen({ navigation }) {
 
         <Animated.View style={listAnimatedStyle}>
           <FlatList
-            data={pets}
+            data={petList}
             keyExtractor={(item) => item.id}
             renderItem={renderPetItem}
             contentContainerStyle={petListStyles.listContent}
