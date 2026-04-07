@@ -2,13 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import petDetailStyles from '../styles/PetDetailStyles';
 
-function PetDetailScreen({ route, navigation }) {
+function PetDetailScreen({ route, navigation, pets }) {
   const selectedPet = route?.params?.pet;
   const petId = selectedPet?.id;
-  const { pets } = usePetContext();
 
   const petData = useMemo(() => {
     if (!petId) {
