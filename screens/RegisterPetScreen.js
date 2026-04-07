@@ -12,11 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import registerPetStyles from '../styles/RegisterPetStyles';
 
-function RegisterPetScreen() {
-  const { addPet } = usePetContext();
+function RegisterPetScreen({ addPet }) {
   const [name, setName] = useState('');
   const [species, setSpecies] = useState('');
   const [breed, setBreed] = useState('');

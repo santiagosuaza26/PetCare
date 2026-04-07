@@ -2,13 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import petListStyles from '../styles/PetListStyles';
 
 const PET_DETAIL_ROUTE = 'PetDetail';
 
-function PetListScreen({ navigation }) {
-  const { pets, setPets } = usePetContext();
+function PetListScreen({ navigation, pets, setPets }) {
   const [petList, setPetList] = useState([]);
   const titleAnimation = useRef(new Animated.Value(0)).current;
   const listAnimation = useRef(new Animated.Value(0)).current;
