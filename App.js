@@ -1,16 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { PetProvider } from './context/PetContext';
 import PetListScreen from './screens/PetListScreen';
 import PetDetailScreen from './screens/PetDetailScreen';
 import RegisterPetScreen from './screens/RegisterPetScreen';
 import TipsScreen from './screens/TipsScreen';
 import appStyles from './styles/AppStyles';
+
+const INITIAL_PETS = [
+  {
+    id: '1',
+    name: 'Luna',
+    species: 'Perro',
+    breed: 'Labrador',
+    age: 4,
+    weight: 24,
+    isFavorite: false
+  },
+  {
+    id: '2',
+    name: 'Milo',
+    species: 'Gato',
+    breed: 'Siames',
+    age: 2,
+    weight: 5,
+    isFavorite: false
+  },
+  {
+    id: '3',
+    name: 'Nala',
+    species: 'Perro',
+    breed: 'Beagle',
+    age: 1,
+    weight: 10,
+    isFavorite: false
+  }
+];
 
 const TAB_ROUTES = {
   PETS: 'PetsTab',
@@ -55,7 +84,7 @@ function getTabScreenOptions(route) {
   };
 }
 
-function PetsStackNavigator() {
+function PetsStackNavigator({ pets, onToggleFavorite }) {
   return (
     <STACK_NAVIGATOR.Navigator
       initialRouteName={STACK_ROUTES.PET_LIST}
@@ -68,56 +97,97 @@ function PetsStackNavigator() {
     >
       <STACK_NAVIGATOR.Screen
         name={STACK_ROUTES.PET_LIST}
-        component={PetListScreen}
         options={{
           title: 'Mascotas'
         }}
-      />
+      >
+        {(screenProps) => <PetListScreen {...screenProps} pets={pets} />}
+      </STACK_NAVIGATOR.Screen>
       <STACK_NAVIGATOR.Screen
         name={STACK_ROUTES.PET_DETAIL}
-        component={PetDetailScreen}
         options={{
           title: 'Detalle de mascota'
         }}
-      />
+      >
+        {(screenProps) => (
+          <PetDetailScreen
+            {...screenProps}
+            pets={pets}
+            onToggleFavorite={onToggleFavorite}
+          />
+        )}
+      </STACK_NAVIGATOR.Screen>
     </STACK_NAVIGATOR.Navigator>
   );
 }
 
 function App() {
+  const [pets, setPets] = useState(INITIAL_PETS);
+
+  const addPet = (petData) => {
+    setPets((previousPets) => {
+      return [
+        {
+          ...petData,
+          isFavorite: false
+        },
+        ...previousPets
+      ];
+    });
+  };
+
+  const toggleFavorite = (petId) => {
+    if (!petId) {
+      return;
+    }
+
+    setPets((previousPets) => {
+      return previousPets.map((pet) => {
+        if (pet.id !== petId) {
+          return pet;
+        }
+
+        return {
+          ...pet,
+          isFavorite: !pet.isFavorite
+        };
+      });
+    });
+  };
+
   return (
-    <PetProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <TAB_NAVIGATOR.Navigator
-            initialRouteName={TAB_ROUTES.PETS}
-            screenOptions={({ route }) => getTabScreenOptions(route)}
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <TAB_NAVIGATOR.Navigator
+          initialRouteName={TAB_ROUTES.PETS}
+          screenOptions={({ route }) => getTabScreenOptions(route)}
+        >
+          <TAB_NAVIGATOR.Screen
+            name={TAB_ROUTES.PETS}
+            options={{
+              title: 'Mascotas'
+            }}
           >
-            <TAB_NAVIGATOR.Screen
-              name={TAB_ROUTES.PETS}
-              component={PetsStackNavigator}
-              options={{
-                title: 'Mascotas'
-              }}
-            />
-            <TAB_NAVIGATOR.Screen
-              name={TAB_ROUTES.REGISTER}
-              component={RegisterPetScreen}
-              options={{
-                title: 'Registrar'
-              }}
-            />
-            <TAB_NAVIGATOR.Screen
-              name={TAB_ROUTES.TIPS}
-              component={TipsScreen}
-              options={{
-                title: 'Consejos'
-              }}
-            />
-          </TAB_NAVIGATOR.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </PetProvider>
+            {() => <PetsStackNavigator pets={pets} onToggleFavorite={toggleFavorite} />}
+          </TAB_NAVIGATOR.Screen>
+          <TAB_NAVIGATOR.Screen
+            name={TAB_ROUTES.REGISTER}
+            options={{
+              title: 'Registrar'
+            }}
+          >
+            {(screenProps) => <RegisterPetScreen {...screenProps} addPet={addPet} />}
+          </TAB_NAVIGATOR.Screen>
+          <TAB_NAVIGATOR.Screen
+            name={TAB_ROUTES.TIPS}
+            component={TipsScreen}
+            options={{
+              title: 'Consejos'
+            }}
+          />
+        </TAB_NAVIGATOR.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

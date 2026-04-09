@@ -1,54 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import petListStyles from '../styles/PetListStyles';
 
 const PET_DETAIL_ROUTE = 'PetDetail';
 
-function PetListScreen({ navigation }) {
-  const { pets, setPets } = usePetContext();
+function PetListScreen({ navigation, pets }) {
   const [petList, setPetList] = useState([]);
-  const titleAnimation = useRef(new Animated.Value(0)).current;
-  const listAnimation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const mockPets = [
-      {
-        id: '1',
-        name: 'Luna',
-        species: 'Perro',
-        breed: 'Labrador',
-        age: 4,
-        weight: 24
-      },
-      {
-        id: '2',
-        name: 'Milo',
-        species: 'Gato',
-        breed: 'Siames',
-        age: 2,
-        weight: 5
-      },
-      {
-        id: '3',
-        name: 'Nala',
-        species: 'Perro',
-        breed: 'Beagle',
-        age: 1,
-        weight: 10
-      }
-    ];
-
-    setPets((previousPets) => {
-      if (previousPets.length > 0) {
-        return previousPets;
-      }
-
-      return mockPets;
-    });
-  }, [setPets]);
+  const [titleAnimation] = useState(() => new Animated.Value(0));
+  const [listAnimation] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     setPetList(pets);

@@ -1,25 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import petDetailStyles from '../styles/PetDetailStyles';
 
-function PetDetailScreen({ route, navigation }) {
+function PetDetailScreen({ route, navigation, pets, onToggleFavorite }) {
   const selectedPet = route?.params?.pet;
   const petId = selectedPet?.id;
-  const { pets } = usePetContext();
+  const petCollection = Array.isArray(pets) ? pets : [];
 
-  const petData = useMemo(() => {
-    if (!petId) {
-      return selectedPet;
-    }
+  const matchedPet = petCollection.find((pet) => pet.id === petId);
+  const petData = matchedPet || selectedPet;
 
-    const matchedPet = pets.find((pet) => pet.id === petId);
-    return matchedPet || selectedPet;
-  }, [petId, pets, selectedPet]);
-
-  const [isFavorite, setIsFavorite] = useState(false);
   const [viewCounter, setViewCounter] = useState(0);
 
   useEffect(() => {
@@ -37,8 +29,12 @@ function PetDetailScreen({ route, navigation }) {
   };
 
   const handleToggleFavorite = () => {
-    setIsFavorite((previousValue) => !previousValue);
+    if (typeof onToggleFavorite === 'function') {
+      onToggleFavorite(petData?.id);
+    }
   };
+
+  const isFavorite = Boolean(petData?.isFavorite);
 
   const petWeight = typeof petData?.weight === 'number' ? `${petData.weight} kg` : 'No disponible';
   const petAgeLabel = typeof petData?.age === 'number' ? `${petData.age} anos` : 'No disponible';

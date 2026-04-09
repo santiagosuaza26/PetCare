@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   Alert,
@@ -12,11 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { usePetContext } from '../context/PetContext';
 import registerPetStyles from '../styles/RegisterPetStyles';
 
-function RegisterPetScreen() {
-  const { addPet } = usePetContext();
+function RegisterPetScreen({ addPet }) {
   const [name, setName] = useState('');
   const [species, setSpecies] = useState('');
   const [breed, setBreed] = useState('');
@@ -24,7 +22,7 @@ function RegisterPetScreen() {
   const [weight, setWeight] = useState('');
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [focusedInput, setFocusedInput] = useState('');
-  const formAnimation = useRef(new Animated.Value(0)).current;
+  const [formAnimation] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     const hasAllTextFields =
