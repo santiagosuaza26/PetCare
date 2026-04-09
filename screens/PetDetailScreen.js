@@ -9,11 +9,13 @@ function PetDetailScreen({ route, navigation, pets, onToggleFavorite }) {
   const petId = selectedPet?.id;
   const petCollection = Array.isArray(pets) ? pets : [];
 
+  // Use pet data from the list, or use route data as backup.
   const matchedPet = petCollection.find((pet) => pet.id === petId);
   const petData = matchedPet || selectedPet;
 
   const [viewCounter, setViewCounter] = useState(0);
 
+  // Increase the local counter when the pet changes.
   useEffect(() => {
     setViewCounter((previousCounter) => previousCounter + 1);
   }, [petId]);
@@ -29,6 +31,7 @@ function PetDetailScreen({ route, navigation, pets, onToggleFavorite }) {
   };
 
   const handleToggleFavorite = () => {
+    // Run callback only if it is a function.
     if (typeof onToggleFavorite === 'function') {
       onToggleFavorite(petData?.id);
     }
@@ -36,6 +39,7 @@ function PetDetailScreen({ route, navigation, pets, onToggleFavorite }) {
 
   const isFavorite = Boolean(petData?.isFavorite);
 
+  // Build labels and use defaults for missing values.
   const petWeight = typeof petData?.weight === 'number' ? `${petData.weight} kg` : 'No disponible';
   const petAgeLabel = typeof petData?.age === 'number' ? `${petData.age} anos` : 'No disponible';
 

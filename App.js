@@ -41,6 +41,7 @@ const INITIAL_PETS = [
   }
 ];
 
+// Keep route names in one place.
 const TAB_ROUTES = {
   PETS: 'PetsTab',
   REGISTER: 'RegisterTab',
@@ -85,6 +86,7 @@ function getTabScreenOptions(route) {
 }
 
 function PetsStackNavigator({ pets, onToggleFavorite }) {
+  // Use a stack only inside the Pets tab.
   return (
     <STACK_NAVIGATOR.Navigator
       initialRouteName={STACK_ROUTES.PET_LIST}
@@ -125,6 +127,7 @@ function App() {
   const [pets, setPets] = useState(INITIAL_PETS);
 
   const addPet = (petData) => {
+    // Add the new pet at the top of the list.
     setPets((previousPets) => {
       return [
         {
@@ -137,6 +140,7 @@ function App() {
   };
 
   const toggleFavorite = (petId) => {
+    // Stop if there is no pet id.
     if (!petId) {
       return;
     }

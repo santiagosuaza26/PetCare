@@ -10,6 +10,7 @@ function TipsScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentTip, setCurrentTip] = useState(null);
 
+  // Load tips once and start auto rotation.
   useEffect(() => {
     setTipsList(tipsData);
 
@@ -17,6 +18,7 @@ function TipsScreen() {
       return undefined;
     }
 
+    // Move to the next tip every 5 seconds.
     const intervalId = setInterval(() => {
       setCurrentIndex((previousIndex) => {
         return (previousIndex + 1) % tipsData.length;
@@ -28,6 +30,7 @@ function TipsScreen() {
     };
   }, []);
 
+  // Update the shown tip when index or list changes.
   useEffect(() => {
     if (tipsList.length === 0) {
       setCurrentTip(null);

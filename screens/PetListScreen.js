@@ -11,10 +11,12 @@ function PetListScreen({ navigation, pets }) {
   const [titleAnimation] = useState(() => new Animated.Value(0));
   const [listAnimation] = useState(() => new Animated.Value(0));
 
+  // Keep the local list in sync with props.
   useEffect(() => {
     setPetList(pets);
   }, [pets]);
 
+  // Run a small animation when the screen opens.
   useEffect(() => {
     Animated.sequence([
       Animated.timing(titleAnimation, {
@@ -59,13 +61,14 @@ function PetListScreen({ navigation, pets }) {
   };
 
   const getSpeciesEmoji = (speciesName) => {
-    const normalizedSpecies = speciesName?.toLowerCase();
+    // Use lower case and trim spaces to match known species.
+    const normalizedSpecies = speciesName?.trim().toLowerCase();
 
-    if (normalizedSpecies === 'perro') {
+    if (normalizedSpecies === 'perro' || normalizedSpecies === 'dog') {
       return '🐶';
     }
 
-    if (normalizedSpecies === 'gato') {
+    if (normalizedSpecies === 'gato' || normalizedSpecies === 'cat') {
       return '🐱';
     }
 

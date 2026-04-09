@@ -24,6 +24,7 @@ function RegisterPetScreen({ addPet }) {
   const [focusedInput, setFocusedInput] = useState('');
   const [formAnimation] = useState(() => new Animated.Value(0));
 
+  // Enable submit only when all fields are valid.
   useEffect(() => {
     const hasAllTextFields =
       name.trim() !== '' &&
@@ -37,6 +38,7 @@ function RegisterPetScreen({ addPet }) {
     setIsSubmitEnabled(hasAllTextFields && hasValidAge && hasValidWeight);
   }, [name, species, breed, age, weight]);
 
+  // Animate the form on first render.
   useEffect(() => {
     Animated.timing(formAnimation, {
       toValue: 1,
@@ -73,6 +75,7 @@ function RegisterPetScreen({ addPet }) {
   };
 
   const handleRegisterPet = () => {
+    // Stop if the form is not valid.
     if (!isSubmitEnabled) {
       return;
     }
